@@ -499,10 +499,11 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> fl
 @api_router.get("/nearby-helpers")
 async def get_nearby_helpers(lat: float, lon: float, radius_km: float = 5.0):
     """Get helpers within radius of given location"""
-    helpers = await db.users.find({
-        "is_helper_mode": True,
-        "current_location": {"$ne": None}
-    }).to_list(100)
+    # Optimized: only fetch needed fields for helper lookup
+    helpers = await db.users.find(
+        {"is_helper_mode": True, "current_location": {"$ne": None}},
+        {"id": 1, "name": 1, "current_location": 1, "_id": 0}
+    ).to_list(100)
     
     nearby = []
     for helper in helpers:
