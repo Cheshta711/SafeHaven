@@ -339,9 +339,10 @@ async def send_chat_message(message: ChatMessageCreate):
     )
     await db.chat_messages.insert_one(user_msg.model_dump())
     
-    # Get chat history for context
+    # Get chat history for context (optimized with projection)
     history = await db.chat_messages.find(
-        {"user_id": message.user_id}
+        {"user_id": message.user_id},
+        {"role": 1, "content": 1, "created_at": 1, "_id": 0}
     ).sort("created_at", -1).to_list(20)
     
     # Prepare context from history
