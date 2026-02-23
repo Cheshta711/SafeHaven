@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,8 +8,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SplashScreen() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const fadeAnim = new Animated.Value(0);
-  const scaleAnim = new Animated.Value(0.8);
+  const [fadeAnim] = useState(() => new Animated.Value(0));
+  const [scaleAnim] = useState(() => new Animated.Value(0.8));
+
+  const checkUserStatus = useCallback(async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      setTimeout(() => {
+        setIsLoading(false);
+        if (userId) {
+          router.replace('/(tabs)/home');
+        }
+      }, 2000);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  }, [router]);
 
   useEffect(() => {
     Animated.parallel([
@@ -27,21 +41,7 @@ export default function SplashScreen() {
     ]).start();
 
     checkUserStatus();
-  }, []);
-
-  const checkUserStatus = async () => {
-    try {
-      const userId = await AsyncStorage.getItem('userId');
-      setTimeout(() => {
-        setIsLoading(false);
-        if (userId) {
-          router.replace('/(tabs)/home');
-        }
-      }, 2000);
-    } catch (error) {
-      setIsLoading(false);
-    }
-  };
+  }, [fadeAnim, scaleAnim, checkUserStatus]);
 
   const handleGetStarted = () => {
     router.push('/onboarding');
