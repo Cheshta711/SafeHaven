@@ -249,7 +249,7 @@ async def get_sos_alert(alert_id: str):
 
 @api_router.get("/sos/user/{user_id}", response_model=List[SOSAlert])
 async def get_user_alerts(user_id: str):
-    alerts = await db.sos_alerts.find({"user_id": user_id}).to_list(100)
+    alerts = await db.sos_alerts.find({"user_id": user_id}, {"_id": 0}).to_list(100)
     return [SOSAlert(**alert) for alert in alerts]
 
 @api_router.put("/sos/{alert_id}/resolve")
