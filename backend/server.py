@@ -194,7 +194,7 @@ async def create_contact(contact: EmergencyContactCreate):
 
 @api_router.get("/contacts/{user_id}", response_model=List[EmergencyContact])
 async def get_user_contacts(user_id: str):
-    contacts = await db.emergency_contacts.find({"user_id": user_id}).to_list(100)
+    contacts = await db.emergency_contacts.find({"user_id": user_id}, {"_id": 0}).to_list(100)
     return [EmergencyContact(**contact) for contact in contacts]
 
 @api_router.delete("/contacts/{contact_id}")
