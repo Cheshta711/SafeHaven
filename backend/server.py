@@ -216,7 +216,10 @@ async def create_sos_alert(alert: SOSAlertCreate):
     user = await db.users.find_one({"id": alert.user_id})
     
     # Send mock notifications to emergency contacts
-    contacts = await db.emergency_contacts.find({"user_id": alert.user_id}).to_list(100)
+    contacts = await db.emergency_contacts.find(
+        {"user_id": alert.user_id}, 
+        {"name": 1, "phone": 1, "_id": 0}
+    ).to_list(100)
     for contact in contacts:
         mock_notification = MockNotification(
             type="sms",
