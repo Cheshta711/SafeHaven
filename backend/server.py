@@ -179,7 +179,8 @@ async def update_user(user_id: str, user_update: UserProfileUpdate):
 
 @api_router.get("/users", response_model=List[UserProfile])
 async def get_all_users():
-    users = await db.users.find().to_list(1000)
+    # Optimized: exclude photo field from list queries for performance
+    users = await db.users.find({}, {"_id": 0}).to_list(100)
     return [UserProfile(**user) for user in users]
 
 # ==================== EMERGENCY CONTACTS ENDPOINTS ====================
