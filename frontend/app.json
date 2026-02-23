@@ -1,22 +1,37 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "SafeHaven",
+    "slug": "safehaven",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "safehaven",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Share location during emergencies",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Track location for safety alerts",
+        "NSPhotoLibraryUsageDescription": "Add profile photo for identification",
+        "NSCameraUsageDescription": "Take profile photo for identification"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000"
+        "backgroundColor": "#0F172A"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "VIBRATE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -31,7 +46,19 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000"
+          "backgroundColor": "#0F172A"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow SafeHaven to track your location for safety alerts."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow SafeHaven to access photos for your profile."
         }
       ]
     ],
